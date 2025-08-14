@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Happy Birthday Flip Card</title>
+    <link href="https://fonts.googleapis.com/css?family=Pacifico&display=swap" rel="stylesheet">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+        }
+        body {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Pacifico', cursive;
+            position: relative;
+        }
+        .balloons {
+            position: absolute;
+            width: 100vw;
+            height: 100vh;
+            top: 0; left: 0;
+            pointer-events: none;
+            z-index: 2;
+        }
+        .balloon {
+            position: absolute;
+            bottom: -150px;
+            width: 60px;
+            height: 80px;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            opacity: 0.8;
+            animation: float 8s linear infinite;
+        }
+        .balloon:nth-child(1) { left: 10vw; background: #ff6f91; animation-delay: 0s;}
+        .balloon:nth-child(2) { left: 30vw; background: #f9f871; animation-delay: 2s;}
+        .balloon:nth-child(3) { left: 50vw; background: #6fcf97; animation-delay: 4s;}
+        .balloon:nth-child(4) { left: 70vw; background: #56ccf2; animation-delay: 1s;}
+        .balloon:nth-child(5) { left: 85vw; background: #bb6bd9; animation-delay: 3s;}
+        .balloon:after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: -30px;
+            width: 2px;
+            height: 30px;
+            background: #888;
+            transform: translateX(-50%);
+        }
+        @keyframes float {
+            0% { transform: translateY(0) scale(1);}
+            100% { transform: translateY(-110vh) scale(1.1);}
+        }
+
+        .flip-card {
+            width: 500px;
+            height: 600px;
+            perspective: 2000px;
+            position: relative;
+            z-index: 3;
+        }
+        .flip-inner {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            transition: transform 1s cubic-bezier(.68,-0.55,.27,1.55);
+            transform-style: preserve-3d;
+        }
+        .flip-front, .flip-back {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            background: rgba(255,255,255,0.95);
+            border-radius: 30px;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.2);
+            font-size: 2.2rem;
+            padding: 40px;
+            text-align: center;
+        }
+        .flip-front {
+            z-index: 2;
+        }
+        .flip-back {
+            transform: rotateY(180deg);
+            z-index: 1;
+        }
+        .cake {
+            margin-bottom: 30px;
+            position: relative;
+            width: 220px;
+            height: 220px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+        }
+        .cake-base {
+            width: 200px;
+            height: 80px;
+            background: #f7c59f;
+            border-radius: 0 0 100px 100px / 0 0 80px 80px;
+            position: absolute;
+            bottom: 0;
+            left: 10px;
+            box-shadow: 0 8px 20px #e7a977;
+        }
+        .cake-layer {
+            width: 180px;
+            height: 60px;
+            background: #fff;
+            border-radius: 90px 90px 80px 80px / 60px 60px 40px 40px;
+            position: absolute;
+            bottom: 60px;
+            left: 20px;
+            border-bottom: 8px solid #f7c59f;
+        }
+        .cake-top {
+            width: 140px;
+            height: 40px;
+            background: #ff6f91;
+            border-radius: 70px 70px 60px 60px / 40px 40px 30px 30px;
+            position: absolute;
+            bottom: 100px;
+            left: 40px;
+            border-bottom: 8px solid #fff;
+        }
+        .candle {
+            width: 16px;
+            height: 50px;
+            background: repeating-linear-gradient(135deg, #fff, #fff 4px, #ff6f91 4px, #ff6f91 8px);
+            border-radius: 8px;
+            position: absolute;
+            left: 102px;
+            bottom: 140px;
+            z-index: 2;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+        }
+        .flame {
+            width: 18px;
+            height: 28px;
+            background: radial-gradient(ellipse at center, #ffe066 60%, #ffb347 100%);
+            border-radius: 50% 50% 60% 60%;
+            position: absolute;
+            left: 99px;
+            bottom: 180px;
+            z-index: 3;
+            animation: flame-flicker 0.7s infinite alternate;
+            opacity: 0.9;
+            filter: blur(0.5px);
+        }
+        @keyframes flame-flicker {
+            0% { transform: scaleY(1) scaleX(1) rotate(-3deg);}
+            100% { transform: scaleY(1.1) scaleX(1.05) rotate(3deg);}
+        }
+        .music-notes {
+            position: absolute;
+            top: 10px;
+            right: 30px;
+            z-index: 10;
+            pointer-events: none;
+        }
+        .note {
+            font-size: 2.5rem;
+            color: #ff6f91;
+            opacity: 0.7;
+            animation: note-float 2.5s linear infinite;
+            position: absolute;
+        }
+        .note:nth-child(1) { left: 0; animation-delay: 0s;}
+        .note:nth-child(2) { left: 30px; animation-delay: 0.7s;}
+        .note:nth-child(3) { left: 60px; animation-delay: 1.2s;}
+        @keyframes note-float {
+            0% { top: 0; opacity: 0.7;}
+            80% { opacity: 1;}
+            100% { top: -60px; opacity: 0;}
+        }
+        .wish {
+            margin-top: 30px;
+            font-size: 2.2rem;
+            color: #ff6f91;
+            text-shadow: 0 2px 8px #fff, 0 1px 0 #fcb69f;
+            line-height: 1.3;
+        }
+        .flip-btn {
+            margin-top: 40px;
+            font-size: 1.3rem;
+            background: #ff6f91;
+            color: #fff;
+            border: none;
+            border-radius: 20px;
+            padding: 12px 36px;
+            cursor: pointer;
+            box-shadow: 0 2px 10px #fcb69f;
+            transition: background 0.2s;
+        }
+        .flip-btn:hover {
+            background: #fcb69f;
+        }
+        @media (max-width: 600px) {
+            .flip-card { width: 95vw; height: 80vh;}
+            .flip-front, .flip-back { font-size: 1.2rem; padding: 10px;}
+            .cake { width: 120px; height: 120px;}
+            .cake-base { width: 100px; height: 40px; left: 5px;}
+            .cake-layer { width: 90px; height: 30px; left: 10px;}
+            .cake-top { width: 70px; height: 20px; left: 20px;}
+            .candle { width: 8px; height: 25px; left: 51px; bottom: 70px;}
+            .flame { width: 9px; height: 14px; left: 49px; bottom: 90px;}
+        }
+    </style>
+</head>
+<body>
+    <div class="balloons">
+        <div class="balloon"></div>
+        <div class="balloon"></div>
+        <div class="balloon"></div>
+        <div class="balloon"></div>
+        <div class="balloon"></div>
+    </div>
+    <div class="flip-card" id="flipCard">
+        <div class="flip-inner" id="flipInner">
+            <!-- Front 1 -->
+            <div class="flip-front" id="cardFront">
+                <div class="music-notes">
+                    <span class="note">&#119070;</span>
+                    <span class="note">&#119071;</span>
+                    <span class="note">&#119074;</span>
+                </div>
+                <div class="cake">
+                    <div class="cake-base"></div>
+                    <div class="cake-layer"></div>
+                    <div class="cake-top"></div>
+                    <div class="candle"></div>
+                    <div class="flame"></div>
+                </div>
+                <div class="wish">
+                    Happy Birthday!<br>
+                    May your day be filled with sweetness, laughter, and magical moments!
+                </div>
+                <button class="flip-btn" onclick="flipCard()">Flip</button>
+            </div>
+            <!-- Back 1 -->
+            <div class="flip-back" id="cardBack">
+                <div class="wish">
+                    Wishing you a year ahead<br>
+                    as bright and colorful as these balloons!<br>
+                    Celebrate big!
+                </div>
+                <button class="flip-btn" onclick="flipCard()">Flip</button>
+            </div>
+        </div>
+    </div>
+    <audio id="bdayMusic" src="happy-birthday-334876.mp3" autoplay loop></audio>
+    <script>
+        // Wishes for each flip
+        const wishes = [
+            {
+                front: `<div class="music-notes">
+                                    <span class="note">&#119070;</span>
+                                    <span class="note">&#119071;</span>
+                                    <span class="note">&#119074;</span>
+                                </div>
+                                <div class="cake">
+                                    <div class="cake-base"></div>
+                                    <div class="cake-layer"></div>
+                                    <div class="cake-top"></div>
+                                    <div class="candle"></div>
+                                    <div class="flame"></div>
+                                </div>
+                                <div class="wish">
+                                    Happy Birthday!<br>
+                                    May your day be filled with sweetness, laughter, and magical moments!
+                                </div>`,
+                back: `<div class="wish">
+                                Wishing you a year ahead<br>
+                                as bright and colorful as these balloons!<br>
+                                Celebrate big!
+                            </div>`
+            },
+            {
+                front: `<div class="wish">
+                                    May your dreams soar high<br>
+                                    like balloons in the sky!<br>
+                                    Have a fantastic birthday!
+                                </div>`,
+                back: `<div class="wish">
+                                Another year, another adventure!<br>
+                                May happiness follow you wherever you go.
+                            </div>`
+            },
+            {
+                front: `<div class="wish">
+                                    Blow out the candles,<br>
+                                    make a wish,<br>
+                                    and let the magic begin!
+                                </div>`,
+                back: `<div class="wish">
+                                Here's to laughter, love,<br>
+                                and unforgettable memories.<br>
+                                Happy Birthday!
+                            </div>`
+            },
+            {
+                front: `<div class="wish">
+                                    Sending you a sky full of balloons<br>
+                                    and a heart full of joy.<br>
+                                    Enjoy your special day!
+                                </div>`,
+                back: `<div class="wish">
+                                May your birthday sparkle<br>
+                                with moments of joy and delight!
+                            </div>`
+            },
+            {
+                front: `<div class="wish">
+                                    Cheers to you!<br>
+                                    Wishing you endless smiles,<br>
+                                    and a year as wonderful as you are!
+                                </div>`,
+                back: `<div class="wish">
+                                Happy Birthday!<br>
+                                May all your wishes come true!
+                            </div>`
+            }
+        ];
+
+        let flipCount = 0;
+        let isFlipped = false;
+
+        function flipCard() {
+            const flipInner = document.getElementById('flipInner');
+            isFlipped = !isFlipped;
+            flipInner.style.transform = isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)';
+            if (isFlipped) {
+                setTimeout(() => {
+                    flipCount++;
+                    if (flipCount < wishes.length) {
+                        document.getElementById('cardFront').innerHTML = wishes[flipCount].front + `<button class="flip-btn" onclick="flipCard()">Flip</button>`;
+                        document.getElementById('cardBack').innerHTML = wishes[flipCount].back + `<button class="flip-btn" onclick="flipCard()">Flip</button>`;
+                    }
+                }, 1000);
+            }
+        }
+
+        // Optional: Pause music on click
+        document.getElementById('bdayMusic').volume = 0.2;
+        document.body.addEventListener('click', function() {
+            const music = document.getElementById('bdayMusic');
+            if (music.paused) music.play();
+        });
+    </script>
+</body>
+
+</html>
